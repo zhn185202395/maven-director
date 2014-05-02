@@ -41,10 +41,14 @@ public abstract class AbstractClashMojo extends AbstractMojo {
    * @since 0.3
    */
 <<<<<<< HEAD
+<<<<<<< HEAD
   @Parameter( alias = "includedScopes")
 =======
   @Parameter( alias = "includedScopes", defaultValue = "compile")
 >>>>>>> FETCH_HEAD
+=======
+  @Parameter( alias = "includedScopes")
+>>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
   private String[] includedScopes;
 
   /**
@@ -53,10 +57,14 @@ public abstract class AbstractClashMojo extends AbstractMojo {
    * @since 0.3
    */
 <<<<<<< HEAD
+<<<<<<< HEAD
   @Parameter( alias = "excludedScopes" )
 =======
   @Parameter( alias = "excludedScopes", defaultValue = "null" )
 >>>>>>> FETCH_HEAD
+=======
+  @Parameter( alias = "excludedScopes" )
+>>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
   private String[] excludedScopes;
 
   /**
@@ -92,10 +100,14 @@ public abstract class AbstractClashMojo extends AbstractMojo {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     if ( this.excludedScopes == null || this.excludedScopes.length == 0 ) {
 =======
     if ( this.excludedScopes == null ) {
 >>>>>>> FETCH_HEAD
+=======
+    if ( this.excludedScopes == null || this.excludedScopes.length == 0 ) {
+>>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
 
     } else {
       excludedScopesList.addAll( Arrays.asList( this.excludedScopes ) );

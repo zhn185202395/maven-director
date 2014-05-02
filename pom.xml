@@ -181,6 +181,9 @@
       </plugin>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
       <plugin>
         <groupId>com.clashinspector</groupId>
         <artifactId>clashinspector-maven-plugin</artifactId>
@@ -246,21 +249,30 @@
 
       </plugin>
 
+<<<<<<< HEAD
 =======
 
 
 >>>>>>> FETCH_HEAD
+=======
+>>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
     </plugins>
   </build>
   <reporting>
     <plugins>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
 
 
 
 
+<<<<<<< HEAD
 =======
 >>>>>>> FETCH_HEAD
+=======
+>>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
