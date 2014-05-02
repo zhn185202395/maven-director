@@ -1,18 +1,9 @@
 package com.clashinspector.model;
 
 import com.clashinspector.mojos.ClashSeverity;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import com.clashinspector.mojos.WhiteListDependency;
 
 import java.util.List;
-=======
->>>>>>> FETCH_HEAD
-=======
-import com.clashinspector.mojos.WhiteListDependency;
-
-import java.util.List;
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
 
 
 public class InnerVersionClash {
@@ -37,10 +28,6 @@ public class InnerVersionClash {
     }
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
   //Checks if the inner clash is in white list... if one dependency of the inner clah is in white list it gives back an true
 
   public boolean hasDependencyInWhiteList( List<WhiteListDependency> whiteList ) {
@@ -57,11 +44,6 @@ public class InnerVersionClash {
     }
     return  result;
   }
-<<<<<<< HEAD
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
 
   public DependencyNodeWrapper getUsedDependencyNodeWrapper() {
     return usedDependencyNodeWrapper;

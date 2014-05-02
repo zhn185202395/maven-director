@@ -25,10 +25,6 @@
     </dependencies>
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
   <build>
     <plugins>
 
@@ -67,10 +63,4 @@
 
     </plugins>
   </build>
-<<<<<<< HEAD
-=======
-
->>>>>>> FETCH_HEAD
-=======
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
 </project>

@@ -1,14 +1,7 @@
 package com.clashinspector.model;
 
 import com.clashinspector.mojos.ClashSeverity;
-<<<<<<< HEAD
-<<<<<<< HEAD
 import com.clashinspector.mojos.WhiteListDependency;
-=======
->>>>>>> FETCH_HEAD
-=======
-import com.clashinspector.mojos.WhiteListDependency;
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -121,10 +114,6 @@ public class OuterVersionClash {
     }
   }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
   public boolean hasAllInnerClashesInWhiteList( List<WhiteListDependency> whiteList ) {
                    //clash for whiteList for outerclash means that every inner clash of this outer clash has a dependency in the white List... this method can be used for the phase mojo to decide if a fail is necessary or not
 
@@ -142,11 +131,6 @@ public class OuterVersionClash {
 
     return result;
   }
-<<<<<<< HEAD
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> d74048da3e5fb9ef92e4380dec3c213838faef73
 
   public ClashSeverity getClashSeverity() {
     return clashSeverity;
