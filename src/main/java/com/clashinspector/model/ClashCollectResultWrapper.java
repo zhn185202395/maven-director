@@ -17,12 +17,7 @@ import java.util.Map;
 
 public class ClashCollectResultWrapper {
 
-
-
-
-
   private final CollectResult collectResult;
-
 
   //This list cotains all projectVersionClashes ... im gegesatz steht dependencyVersionClash
   private final List<OuterVersionClash> outerVersionClashList = new ArrayList<OuterVersionClash>();
@@ -37,10 +32,11 @@ public class ClashCollectResultWrapper {
     this.collectResult = collectResult;
 
     Map<String, Project> projectMap = new LinkedHashMap<String, Project>();
+    Map<Integer, Integer> graphLevelOrderAbsoluteMap = new LinkedHashMap<Integer, Integer>();
 
     this.root = new DependencyNodeWrapper( this.collectResult.getRoot() );
 
-    this.buildDependencyNodeWrapperGraph( this.root, projectMap, 1 );
+    this.buildDependencyNodeWrapperGraph( this.root, projectMap, 1,graphLevelOrderAbsoluteMap );
 
 
     this.initializeClashCollectResultWrapper( this.root, 1 );
@@ -75,9 +71,9 @@ public class ClashCollectResultWrapper {
 
 
   //Enrich Dependency Node with versiondetails and parent pathMap   buildWrapperGraph
-  private void buildDependencyNodeWrapperGraph( DependencyNodeWrapper dependencyNodeWrapperOld, Map<String, Project> projectMap, int graphDepth ) {
+  private void buildDependencyNodeWrapperGraph( DependencyNodeWrapper dependencyNodeWrapperOld, Map<String, Project> projectMap, int graphDepth,Map<Integer, Integer> graphLevelOrderAbsoluteMap ) {
 
-    int graphLevelOrder = 0;
+    int graphLevelOrderRelative = 0;
 
 
     for ( DependencyNode dN : dependencyNodeWrapperOld.getDependencyNode().getChildren() ) {
@@ -98,12 +94,26 @@ public class ClashCollectResultWrapper {
 
       dependencyCounter += 1;
 
-      DependencyNodeWrapper dependencyNodeWrapper = new DependencyNodeWrapper( dN, dependencyNodeWrapperOld, project, graphDepth, graphLevelOrder, dependencyCounter );
+      //Get amount of dependency on one depth level and add one more
+      Integer    graphLevelOrderAbsolute = graphLevelOrderAbsoluteMap.get( graphDepth ) ;
+      if(graphLevelOrderAbsolute == null)
+      {
+        graphLevelOrderAbsoluteMap.put( graphDepth,-1 );
+        graphLevelOrderAbsolute = graphLevelOrderAbsoluteMap.get( graphDepth ) ;
+
+      }
+      graphLevelOrderAbsolute = graphLevelOrderAbsolute +1;
+        graphLevelOrderAbsoluteMap.put( graphDepth,graphLevelOrderAbsolute );
+
+
+
+
+      DependencyNodeWrapper dependencyNodeWrapper = new DependencyNodeWrapper( dN, dependencyNodeWrapperOld, project, graphDepth, graphLevelOrderRelative,graphLevelOrderAbsolute, dependencyCounter );
       project.addInstance( dependencyNodeWrapper );
 
-      graphLevelOrder += 1;
+      graphLevelOrderRelative += 1;
       dependencyNodeWrapperOld.addChildren( dependencyNodeWrapper );
-      this.buildDependencyNodeWrapperGraph( dependencyNodeWrapper, projectMap, graphDepth + 1 );
+      this.buildDependencyNodeWrapperGraph( dependencyNodeWrapper, projectMap, graphDepth + 1,graphLevelOrderAbsoluteMap );
     }
 
 

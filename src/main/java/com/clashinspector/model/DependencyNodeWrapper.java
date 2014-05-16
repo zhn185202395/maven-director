@@ -1,6 +1,8 @@
 package com.clashinspector.model;
 
 import com.clashinspector.mojos.ClashSeverity;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.eclipse.aether.graph.DependencyNode;
 import org.eclipse.aether.version.Version;
 
@@ -21,8 +23,11 @@ public class DependencyNodeWrapper {
   //private final ArrayList<DependencyNodeWrapper> ancestors = new ArrayList<DependencyNodeWrapper>()  ;
   //Tiefe innerhalb des baumes
   private final int graphDepth;
-  //  Rangfolge innerhalb einer ebene(Tiefe)
-  private final int graphLevelOrder;
+  //  Rangfolge innerhalb einer ebene(Tiefe) und einer oberdependency
+  private final int graphLevelOrderRelative;
+  //  Rangfolge innerhalb einer gesamten ebene(Tiefe)
+  private final int graphLevelOrderAbsolute;
+
   //important for usedversion
   private final int addCounter;
   @Nullable
@@ -33,10 +38,11 @@ public class DependencyNodeWrapper {
   //relationship to used version
 
 
-  public DependencyNodeWrapper( DependencyNode dependencyNode, DependencyNodeWrapper parent, Project project, int graphDepth, int graphLevelOrder, int addCounter ) {
+  public DependencyNodeWrapper( DependencyNode dependencyNode, DependencyNodeWrapper parent, Project project, int graphDepth, int graphLevelOrderRelative, int graphLevelOrderAbsolute, int addCounter ) {
     this.dependencyNode = dependencyNode;
     this.graphDepth = graphDepth;
-    this.graphLevelOrder = graphLevelOrder;
+    this.graphLevelOrderRelative = graphLevelOrderRelative;
+    this.graphLevelOrderAbsolute = graphLevelOrderAbsolute;
     this.parent = parent;
     this.addCounter = addCounter;
     this.project = project;
@@ -45,7 +51,8 @@ public class DependencyNodeWrapper {
   public DependencyNodeWrapper( DependencyNode dependencyNode ) {
     this.dependencyNode = dependencyNode;
     this.graphDepth = 0;
-    this.graphLevelOrder = 0;
+    this.graphLevelOrderRelative = 0;
+    this.graphLevelOrderAbsolute =0;
     this.parent = null;
     this.addCounter = 0;
     this.project = null;
@@ -56,9 +63,32 @@ public class DependencyNodeWrapper {
     return dependencyNode;
   }
 
+
   public String getGroupId() {
 
     return this.dependencyNode.getArtifact().getGroupId();
+
+  }
+  @JsonProperty("extension")
+  public String getExtension()
+  {
+    return this.dependencyNode.getArtifact().getExtension();
+  }
+
+  @JsonProperty("repository")
+  public String getRepository()
+  {
+                //TODO entsprechendes Repositoriy zurück geben und nicht nur erstes (wird benötigt für link in html seite)
+
+    if(this.dependencyNode.getRepositories().size()>0)
+    {
+      return   this.dependencyNode.getRepositories().get( 0 ).getHost();
+    }
+    else
+    {
+      return   "";
+    }
+
 
   }
 
@@ -66,21 +96,23 @@ public class DependencyNodeWrapper {
     return this.dependencyNode.getArtifact().getArtifactId();
   }
 
+  @JsonProperty("version")
   public Version getVersion() {
     return this.dependencyNode.getVersion();
   }
+
 
 
   public List<DependencyNodeWrapper> getChildren() {
     return Collections.unmodifiableList( this.children );
   }
 
-
+   @JsonIgnore
   @Nullable
   public DependencyNodeWrapper getParent() {
     return this.parent;
   }
-
+   @JsonIgnore
   public List<DependencyNodeWrapper> getAllAncestors() {
     List<DependencyNodeWrapper> list = new ArrayList<DependencyNodeWrapper>();
     return this.collectAncestors( list );
@@ -97,7 +129,7 @@ public class DependencyNodeWrapper {
     return list;
   }
 
-
+   @JsonIgnore
   public RelationshipToUsedVersion getRelationShipToUsedVersion() {
     if ( this.project == null ) {
       throw new UnsupportedOperationException( "Not allowed on root node" );
@@ -125,20 +157,26 @@ public class DependencyNodeWrapper {
   public void addChildren( @Nonnull DependencyNodeWrapper dependencyNodeWrapper ) {
     this.children.add( dependencyNodeWrapper );
   }
-
+  @JsonProperty("graphDepth")
   public int getGraphDepth() {
     return graphDepth;
   }
-
-  public int getGraphLevelOrder() {
-    return graphLevelOrder;
+  @JsonProperty("graphLevelOrderRelative")
+  public int getGraphLevelOrderRelative() {
+    return graphLevelOrderRelative;
   }
 
+  @JsonProperty("graphLevelOrderAbsolute")
+  public int getGraphLevelOrderAbsolute() {
+    return graphLevelOrderAbsolute;
+  }
+
+   @JsonIgnore
   public int getAddCounter() {
     return addCounter;
   }
 
-
+   @JsonIgnore
   @Nullable
   public Project getProject() {
     return project;
@@ -153,7 +191,7 @@ public class DependencyNodeWrapper {
     RelationshipToUsedVersion( ClashSeverity clashSeverity ) {
       this.clashSeverity = clashSeverity;
     }
-
+    @JsonIgnore
     public ClashSeverity getClashSeverity() {
       return clashSeverity;
     }
