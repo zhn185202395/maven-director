@@ -11,7 +11,446 @@
   <goalPrefix>clashinspector</goalPrefix>
   <isolatedRealm>false</isolatedRealm>
   <inheritedByDefault>true</inheritedByDefault>
-  <mojos/>
+  <mojos>
+    <mojo>
+      <goal>listPhase</goal>
+      <description>[Definition of Phase Mojo]</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <phase>compile</phase>
+      <implementation>com.clashinspector.mojos.ClashPhaseMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>excludedScopes</name>
+          <alias>excludedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the excluded dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>failOnClash</name>
+          <alias>failOnClash</alias>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>includeOptional</name>
+          <alias>includeOptional</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines if optional dependencies will be included.</description>
+        </parameter>
+        <parameter>
+          <name>includedScopes</name>
+          <alias>includedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the included dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>remoteRepos</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>repoSession</name>
+          <type>org.eclipse.aether.RepositorySystemSession</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>severity</name>
+          <alias>severity</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>&lt;p&gt;Defines which version clashes will be displayed depending on their severity.&lt;/p&gt;
+&lt;p/&gt;
+&lt;li&gt;&lt;b&gt;SAFE&lt;/b&gt;: Displays &lt;code&gt;SAFE&lt;/code&gt;, &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;UNSAFE&lt;/b&gt;: Displays &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;CRITICAL&lt;/b&gt;: Displays only &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;</description>
+        </parameter>
+        <parameter>
+          <name>whiteList</name>
+          <alias>whiteList</alias>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description></description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <failOnClash implementation="java.lang.String" default-value="true">${failOnClash}</failOnClash>
+        <includeOptional implementation="java.lang.String" default-value="false">${includeOptional}</includeOptional>
+        <project implementation="org.apache.maven.project.MavenProject" default-value="${project}"/>
+        <remoteRepos implementation="java.util.List" default-value="${project.remoteProjectRepositories}"/>
+        <repoSession implementation="org.eclipse.aether.RepositorySystemSession" default-value="${repositorySystemSession}"/>
+        <severity implementation="java.lang.String" default-value="UNSAFE">${severity}</severity>
+        <whiteList implementation="java.util.List">${whiteList}</whiteList>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.eclipse.aether.RepositorySystem</role>
+          <field-name>repoSystem</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>html</goal>
+      <description>Displays the dependency tree for this project. The tree also shows version clashes.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>com.clashinspector.mojos.ClashHtmlMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <since>0.3</since>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>excludedScopes</name>
+          <alias>excludedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the excluded dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>includeOptional</name>
+          <alias>includeOptional</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines if optional dependencies will be included.</description>
+        </parameter>
+        <parameter>
+          <name>includedScopes</name>
+          <alias>includedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the included dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>remoteRepos</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>repoSession</name>
+          <type>org.eclipse.aether.RepositorySystemSession</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>severity</name>
+          <alias>severity</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>&lt;p&gt;Defines which version clashes will be displayed depending on their severity.&lt;/p&gt;
+&lt;p/&gt;
+&lt;li&gt;&lt;b&gt;SAFE&lt;/b&gt;: Displays &lt;code&gt;SAFE&lt;/code&gt;, &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;UNSAFE&lt;/b&gt;: Displays &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;CRITICAL&lt;/b&gt;: Displays only &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <includeOptional implementation="java.lang.String" default-value="false">${includeOptional}</includeOptional>
+        <project implementation="org.apache.maven.project.MavenProject" default-value="${project}"/>
+        <remoteRepos implementation="java.util.List" default-value="${project.remoteProjectRepositories}"/>
+        <repoSession implementation="org.eclipse.aether.RepositorySystemSession" default-value="${repositorySystemSession}"/>
+        <severity implementation="java.lang.String" default-value="UNSAFE">${severity}</severity>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.eclipse.aether.RepositorySystem</role>
+          <field-name>repoSystem</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>list</goal>
+      <description>Displays the dependencies with version clashes and a statistical summary of the clashes.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>com.clashinspector.mojos.ClashListMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <since>0.3</since>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>excludedScopes</name>
+          <alias>excludedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the excluded dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>includeOptional</name>
+          <alias>includeOptional</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines if optional dependencies will be included.</description>
+        </parameter>
+        <parameter>
+          <name>includedScopes</name>
+          <alias>includedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the included dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>remoteRepos</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>repoSession</name>
+          <type>org.eclipse.aether.RepositorySystemSession</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>severity</name>
+          <alias>severity</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>&lt;p&gt;Defines which version clashes will be displayed depending on their severity.&lt;/p&gt;
+&lt;p/&gt;
+&lt;li&gt;&lt;b&gt;SAFE&lt;/b&gt;: Displays &lt;code&gt;SAFE&lt;/code&gt;, &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;UNSAFE&lt;/b&gt;: Displays &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;CRITICAL&lt;/b&gt;: Displays only &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <includeOptional implementation="java.lang.String" default-value="false">${includeOptional}</includeOptional>
+        <project implementation="org.apache.maven.project.MavenProject" default-value="${project}"/>
+        <remoteRepos implementation="java.util.List" default-value="${project.remoteProjectRepositories}"/>
+        <repoSession implementation="org.eclipse.aether.RepositorySystemSession" default-value="${repositorySystemSession}"/>
+        <severity implementation="java.lang.String" default-value="UNSAFE">${severity}</severity>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.eclipse.aether.RepositorySystem</role>
+          <field-name>repoSystem</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+    <mojo>
+      <goal>help</goal>
+      <description>Display help information on clashinspector-maven-plugin.&lt;br/&gt;
+Call &lt;code&gt;mvn clashinspector:help -Ddetail=true -Dgoal=&amp;lt;goal-name&amp;gt;&lt;/code&gt; to display parameter details.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>false</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>com.clashinspector.mojos.HelpMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>true</threadSafe>
+      <parameters>
+        <parameter>
+          <name>detail</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>If &lt;code&gt;true&lt;/code&gt;, display all settable properties for each goal.</description>
+        </parameter>
+        <parameter>
+          <name>goal</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the goal for which to show help. If unspecified, all goals will be displayed.</description>
+        </parameter>
+        <parameter>
+          <name>indentSize</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The number of spaces per indentation level, should be positive.</description>
+        </parameter>
+        <parameter>
+          <name>lineLength</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The maximum length of a display line, should be positive.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <detail implementation="boolean" default-value="false">${detail}</detail>
+        <goal implementation="java.lang.String">${goal}</goal>
+        <indentSize implementation="int" default-value="2">${indentSize}</indentSize>
+        <lineLength implementation="int" default-value="80">${lineLength}</lineLength>
+      </configuration>
+    </mojo>
+    <mojo>
+      <goal>tree</goal>
+      <description>Displays the dependency tree for this project. The tree also shows version clashes.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>true</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>com.clashinspector.mojos.ClashTreeMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <since>0.3</since>
+      <threadSafe>false</threadSafe>
+      <parameters>
+        <parameter>
+          <name>excludedScopes</name>
+          <alias>excludedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the excluded dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>includeOptional</name>
+          <alias>includeOptional</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines if optional dependencies will be included.</description>
+        </parameter>
+        <parameter>
+          <name>includedScopes</name>
+          <alias>includedScopes</alias>
+          <type>java.lang.String[]</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>Defines the included dependency scopes.</description>
+        </parameter>
+        <parameter>
+          <name>project</name>
+          <type>org.apache.maven.project.MavenProject</type>
+          <required>true</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>remoteRepos</name>
+          <type>java.util.List</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>repoSession</name>
+          <type>org.eclipse.aether.RepositorySystemSession</type>
+          <required>false</required>
+          <editable>false</editable>
+          <description></description>
+        </parameter>
+        <parameter>
+          <name>severity</name>
+          <alias>severity</alias>
+          <type>java.lang.String</type>
+          <since>0.3</since>
+          <required>false</required>
+          <editable>true</editable>
+          <description>&lt;p&gt;Defines which version clashes will be displayed depending on their severity.&lt;/p&gt;
+&lt;p/&gt;
+&lt;li&gt;&lt;b&gt;SAFE&lt;/b&gt;: Displays &lt;code&gt;SAFE&lt;/code&gt;, &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;UNSAFE&lt;/b&gt;: Displays &lt;code&gt;UNSAFE&lt;/code&gt; and &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;
+&lt;li&gt;&lt;b&gt;CRITICAL&lt;/b&gt;: Displays only &lt;code&gt;CRITICAL&lt;/code&gt; version clashes.&lt;/li&gt;</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <includeOptional implementation="java.lang.String" default-value="false">${includeOptional}</includeOptional>
+        <project implementation="org.apache.maven.project.MavenProject" default-value="${project}"/>
+        <remoteRepos implementation="java.util.List" default-value="${project.remoteProjectRepositories}"/>
+        <repoSession implementation="org.eclipse.aether.RepositorySystemSession" default-value="${repositorySystemSession}"/>
+        <severity implementation="java.lang.String" default-value="UNSAFE">${severity}</severity>
+      </configuration>
+      <requirements>
+        <requirement>
+          <role>org.eclipse.aether.RepositorySystem</role>
+          <field-name>repoSystem</field-name>
+        </requirement>
+      </requirements>
+    </mojo>
+  </mojos>
   <dependencies>
     <dependency>
       <groupId>com.google.code.findbugs</groupId>

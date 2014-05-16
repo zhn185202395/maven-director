@@ -241,14 +241,14 @@
 
 
         </configuration>
-        <executions>
+      <!--  <executions>
           <execution>
             <goals>
               <goal>listPhase</goal>
             </goals>
 
           </execution>
-        </executions>
+        </executions> -->
 
       </plugin>
 
