@@ -5,6 +5,8 @@ package com.clashinspector.mojos;
 
 import com.clashinspector.model.ClashCollectResultWrapper;
 import com.clashinspector.rest.DependencyRestService;
+import com.clashinspector.rest.UserParameterWrapper;
+
 import com.clashinspector.visualize.ConsoleVisualizer;
 
 import com.sun.net.httpserver.HttpServer;
@@ -34,7 +36,7 @@ import java.nio.file.Files;
  */
 @Mojo(name = "html", requiresProject = true, defaultPhase = LifecyclePhase.NONE)
 public class ClashHtmlMojo extends AbstractClashMojo {
-
+          int port = 8090;
 
   //big tree .. small tree und level mitgeben
   @Override
@@ -48,23 +50,17 @@ public class ClashHtmlMojo extends AbstractClashMojo {
       artifact = new DefaultArtifact( this.getProject().getArtifact().toString() );
 
 
-      com.clashinspector.DependencyService dependencyService = new com.clashinspector.DependencyService();
 
-      ConsoleVisualizer consoleVisualizer = new ConsoleVisualizer();
+      UserParameterWrapper userParameterWrapper = new UserParameterWrapper(this.getIncludedScopesList(),this.getExcludedScopesList(),this.isIncludeOptional()  );
+        //ViewScopeManager initialisieren
+      DependencyRestService.init( artifact,this.getRepoSystem(),this.getRepoSession(), userParameterWrapper );
 
-      ClashCollectResultWrapper clashCollectResultWrapper = new ClashCollectResultWrapper( dependencyService.getDependencyTree( artifact, this.getRepoSession(), this.getRepoSystem(), this.getIncludedScopesList(), this.getExcludedScopesList(), this.isIncludeOptional() ) );
-
-      //consoleVisualizer.visualize( clashCollectResultWrapper, this.getSeverity(), this );
-
-      DependencyRestService.setClashCollectResultWrapper( clashCollectResultWrapper );
-
-
-             //TODO port eventuell variabel machen
+      //TODO port eventuell variabel machen
 
       BufferedReader in = new BufferedReader( new InputStreamReader( System.in ));
 
       ResourceConfig config = new ResourceConfig(DependencyRestService.class);
-      HttpServer server = JdkHttpServerFactory.createHttpServer(new URI( "http://localhost:8080/"), config );
+      HttpServer server = JdkHttpServerFactory.createHttpServer(new URI( "http://localhost:"+port+"/"), config );
 
 
       if (Desktop.isDesktopSupported())
@@ -75,7 +71,14 @@ public class ClashHtmlMojo extends AbstractClashMojo {
         this.transferResourceToTmp( "clashInspectorStyle", "css" );
         this.transferResourceToTmp( "jquery-1.11.0", "js" );
         this.transferResourceToTmp( "main", "js" );
-
+        this.transferResourceToTmp( "openDepNode_xs", "png" );
+        this.transferResourceToTmp( "openDepNode_s", "png" );
+        this.transferResourceToTmp( "openDepNode_m", "png" );
+        this.transferResourceToTmp( "openDepNode_l", "png" );
+        this.transferResourceToTmp( "openDepNode_xl", "png" );
+        this.transferResourceToTmp( "openDepNode_xxl", "png" );
+        this.transferResourceToTmp( "clashinspectorLogo", "jpg" );
+        this.transferResourceToTmp( "fhReutlingenLogo", "jpg" );
 
         desktop.browse(this.transferResourceToTmp( "clashInspector", "html" ));
       }
@@ -85,7 +88,7 @@ public class ClashHtmlMojo extends AbstractClashMojo {
       }
 
 
-      super.getLog().info( "To stop local ClashInspector-Server press enter." );
+      super.getLog().info( "Local ClashInspector-Server running on port "+port+". To stop server press enter." );
 
 
       String inLine = in.readLine();

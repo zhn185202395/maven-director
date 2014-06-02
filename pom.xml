@@ -159,6 +159,8 @@
 
 
 
+
+
   </dependencies>
 
 
@@ -238,9 +240,6 @@
 
 
         </whiteList>        -->
-
-
-
 
 
         </configuration>
