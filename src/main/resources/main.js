@@ -1,5 +1,40 @@
-
+var isopenSearchButton = new Boolean(false);
+var isopenSettingsButton = new Boolean(false);
  //Vllt doch besser objekte ohne rest einzuschreiben ??
+function setOnTopIfScrolled(id){
+    var e_ = $("#"+id);
+
+    var _defautlTop = e_.offset().top - $(document).scrollTop();
+
+    var _defautlLeft = e_.offset().left - $(document).scrollLeft();
+
+    var _position = e_.css('position');
+    var _top = e_.css('top');
+    var _left = e_.css('left');
+    var _zIndex = e_.css('z-index');
+    var _width = e_.css('width');
+
+    $(window).scroll(function(){
+        if($(this).scrollTop() > _defautlTop){
+            var ie6 = /msie 6/i.test(navigator.userAgent);
+
+            if(ie6){
+                e_.css({'position':'absolute',
+                    'top':eval(document.documentElement.scrollTop),
+                   'z-index':99999});
+
+                $("html,body").css({'background-image':'url(about:blank)',
+                    'background-attachment':'fixed'});
+            }else{
+                e_.css({'position':'fixed','top':0+'px',
+                   'z-index':99999});
+            }
+        }else{
+            e_.css({'position':_position,'top':_top,
+               'z-index':_zIndex});
+        }
+    });
+}
 function DependencyNodeObject(dependencyNodeWrapper)
 {
 
@@ -92,6 +127,7 @@ $(".javascriptWarning").hide();
 $("#main").addClass("loading");
 
  getTree();
+ setOnTopIfScrolled("topBar");
 
 
 
@@ -366,12 +402,39 @@ $(document).on('input', '.searchInput', function(){
                 });
 
  $(document).on('click', '.openSearchButton', function(){
+ var mainHeight = parseInt(document.getElementById("main").style.paddingTop);
                             $("#searchContainer").toggle();
+                            if(isopenSearchButton){
+                               mainHeight = mainHeight+40;
+
+
+                              isopenSearchButton=false;
+                              }
+                             else{
+                                mainHeight = mainHeight-40;
+
+                               isopenSearchButton=true;
+                              }
+                               document.getElementById( "main" ).style.paddingTop = mainHeight+"px";
 
                 });
 
  $(document).on('click', '.openSettingsButton', function(){
+ var mainHeight = parseInt(document.getElementById("main").style.paddingTop);
+
                             $("#settingsFilterContainer").toggle();
+                              if(isopenSettingsButton){
+                                  mainHeight = mainHeight+170;
+
+                                                             isopenSettingsButton=false;
+                                                          }
+                                                         else{
+                                                                 mainHeight = mainHeight-170;
+
+                                                               isopenSettingsButton=true;
+                                                          }
+                                 document.getElementById( "main" ).style.paddingTop = mainHeight+"px";
+
 
                 });
 
