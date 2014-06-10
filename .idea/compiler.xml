@@ -25,6 +25,7 @@
         <module name="clashinspector-maven-plugin" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel target="1.7" />
   </component>
 </project>
 
