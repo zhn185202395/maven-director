@@ -16,10 +16,16 @@
     <meta content="The Maven-Plugin ClashInspector enables you to find and analyze dependency conflicts (Version-Clashes) in your Java projects."
           name="description">
 </head>
+<<<<<<< HEAD
 <body class="topBarDisabled">
 <div class="container-fluid">
 
     <div id="logo">
+=======
+<body>
+<div class="mainContainer">
+    <div id="logoContainer">
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
         <div class="pullLeft banner">
             <a href="http://www.clashinspector.com/index.html">
                 <img src="clashinspectorLogo.jpg" alt="ClashInspector">
@@ -33,6 +39,7 @@
 
         </div>
     </div>
+<<<<<<< HEAD
     <div id="topBar">
         <div id="menuContainer" class="topContainer ">
             <div class="pullLeft">
@@ -45,11 +52,25 @@
             </div>
 
             <div class="clearing"></div>
+=======
+
+    <div id ="headerContainer">
+
+    <div id="menuContainer" class="topContainer ">
+        <div class="pullLeft">
+            <span  class="javascriptWarning">Warning! ClashInspector needs JavaScript enabled!</span> <span id="analyzedDep"></span>
+        </div>
+        <div class="pullRight">
+            <span class="openSettingsButton menuEntry">settings & properties <span class="triangleDown"></span></span>
+            <span  class="openSearchButton menuEntry">search dependencies <span class="triangleDown"></span></span>
+            <span  class="openClashListButton menuEntry">show clash-list <span class="triangleUp"></span></span>
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
         </div>
 
 
         <div id="settingsFilterContainer" class="topContainer ">
 
+<<<<<<< HEAD
             <div class="settingsContainer">
                 <h3>Settings</h3>
                 <ul id="includedScopeList" class="easySelectBox">
@@ -88,6 +109,66 @@
 
             </div>
 
+=======
+        <div class="settingsContainer">
+            <h3>Dependency Resolution Settings</h3>
+            <div class="settingsInlineContainer">
+            <label for="includedScopeList" title="Select the scopes of the dependencies that should be included in the dependency-resolution.">Included Scopes</label>
+            <ul title="Select the scopes of the dependencies that should be included in the dependency-resolution." id="includedScopeList" class="easySelectBox selectModeMultiple" >
+                <li>compile</li>
+                <li>test</li>
+                <li>runtime</li>
+                <li>provided</li>
+                <li>system</li>
+
+            </ul>
+            </div>
+            <div class="settingsInlineContainer">
+            <label for="excludedScopeList" title="Select the scopes of the dependencies that should be excluded from the dependency-resolution.">Excluded Scopes</label>
+            <ul title="Select the scopes of the dependencies that should be excluded from the dependency-resolution." id="excludedScopeList" class="easySelectBox selectModeMultiple" >
+                <li>compile</li>
+                <li>test</li>
+                <li>runtime</li>
+                <li>provided</li>
+                <li>system</li>
+
+            </ul>
+            </div>
+            <div class="settingsInlineContainerRight">
+            <label for="clashSeverity" title="Select which paths should be displayed in the tree.">Clash Severity</label>
+            <ul title="Select which paths should be displayed in the tree." id="clashSeverity" class="easySelectBox selectModeSingle" >
+
+                <li class="">UNSAFE</li>
+                <li class="">CRITICAL</li>
+
+            </ul>
+                <label for="includeOptional">Included Optional </label>
+                <div id="includeOptional" class="easyCheckBox">  <div>
+              </div>
+
+              </div>
+
+
+              </div>
+            <div class="clearing"></div>
+            <button id="applyResolutionSettings" class="easyButton" type="button">Apply Settings</button>
+        </div>
+
+        <div class="propertiesContainer">
+            <h3>Display Properties</h3>
+            <label for="treeViewMode" title="Select your preferred Tree-View.">View Mode</label>
+            <ul title="Select your preferred Tree-View." id="treeViewMode" class="easySelectBox selectModeSingle" >
+                <li class="selected">Full</li>
+                <li>Shortened</li>
+
+
+            </ul>
+
+        </div>
+        <div class="clearing"></div>
+
+        <div>
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
         </div>
 
@@ -102,7 +183,20 @@
                 <button id="searchButton" type="button">
 
 
+<<<<<<< HEAD
                     no results
+=======
+    <div id="searchContainer" class="topContainer ">
+        <div class="pullRight">
+        <span class="searchInputLabel">groupId:</span>
+        <input id="groupIdInput" class="searchInput" type="text"/>
+        <span class="searchInputLabel">artifactId:</span>
+        <input id="artifactIdInput" class="searchInput" type="text"/>
+        <span class="searchInputLabel">version:</span>
+        <input id="versionInput" class="searchInput" type="text"/>
+            <span class="triangleLeft" id="searchJumpBack" title="jump back to last search result"></span>
+        <span id="searchResultOutput"   >
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
                 </button>
             </div>
@@ -111,10 +205,28 @@
         <div class="clashListContainer" style="padding-top: 15px;">
 
 
+<<<<<<< HEAD
+=======
+        </span>
+            <span class="triangleRight" id="searchJumpNext" title="jump to next search result"></span>
+          <button id="clearSearchButton" class="easyButton" type="button">clear</button>
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
         </div>
     </div>
 
+<<<<<<< HEAD
     <div id="main" style="padding-top: 30px;">
+=======
+        <div id="clashListContainer">
+
+
+
+        </div>
+
+    </div>
+
+    <div id="contentContainer" style="padding-top: 30px;">
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
         <div id="floatingCirclesG">
             <div class="f_circleG" id="frotateG_01">
             </div>
@@ -133,10 +245,11 @@
             <div class="f_circleG" id="frotateG_08">
             </div>
         </div>
-        <div id="leftMain">
+        <div id="treeContainer">
 
         </div>
 
+<<<<<<< HEAD
         <div class="clearing"></div>
     </div>
 
@@ -148,11 +261,28 @@
 <footer>
     <div class="container-fluid">
         <div class="row span12">Copyright © 2014
+=======
+
+    </div>
+
+
+        <div class="footerContainer">Copyright 2014
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
             <a href="http://www.reutlingen-university.de/">Hochschule Reutlingen</a>.
-            All Rights Reserved.
+            Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License v2.0</a>.
         </div>
+<<<<<<< HEAD
     </div>
 </footer>
+=======
+
+
+</div>
+
+
+
+
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
 
 </body>

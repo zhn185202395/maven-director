@@ -48,6 +48,9 @@ public class DependencyNodeWrapperSerializer extends JsonSerializer<DependencyNo
     jgen.writeStringField( "artifactId",value.getArtifactId() );
     jgen.writeStringField( "groupId",value.getGroupId() );
     jgen.writeStringField( "version",value.getVersion().toString() );
+    jgen.writeStringField( "scope",value.getScope() );
+    jgen.writeBooleanField( "optional",value.getOptional() );
+    jgen.writeBooleanField( "hasConcurrentDependencyWinner",value.hasConcurrentDependencyWinner() );
 
     jgen.writeStringField( "extension",value.getExtension() );
     jgen.writeStringField( "repository",value.getRepository() );

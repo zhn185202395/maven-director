@@ -4,6 +4,7 @@ import com.clashinspector.mojos.ClashSeverity;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.eclipse.aether.graph.DependencyNode;
+import org.eclipse.aether.util.graph.transformer.ConflictResolver;
 import org.eclipse.aether.version.Version;
 
 import javax.annotation.Nonnull;
@@ -46,6 +47,7 @@ public class DependencyNodeWrapper {
     this.parent = parent;
     this.addCounter = addCounter;
     this.project = project;
+
   }
 
   public DependencyNodeWrapper( DependencyNode dependencyNode,Project project ) {
@@ -73,8 +75,35 @@ public class DependencyNodeWrapper {
   public String getExtension()
   {
     return this.dependencyNode.getArtifact().getExtension();
+
   }
 
+  public String getScope()
+  {
+    return this.dependencyNode.getDependency().getScope();
+
+  }
+
+  public Boolean getOptional()
+  {
+    return this.dependencyNode.getDependency().getOptional();
+
+  }
+
+  public Boolean hasConcurrentDependencyWinner()
+  {
+    Object object = this.dependencyNode.getData().get( ConflictResolver.NODE_DATA_WINNER )    ;
+
+        if (object != null)
+        {
+          return true;
+        }
+    else
+        {
+          return false;
+        }
+
+  }
 
   public String getRepository()
   {
@@ -104,8 +133,10 @@ public class DependencyNodeWrapper {
 
 
   public List<DependencyNodeWrapper> getChildren() {
-    return Collections.unmodifiableList( this.children );
+    return this.children ;
   }
+
+
 
 
   @Nullable

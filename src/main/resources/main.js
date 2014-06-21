@@ -53,9 +53,72 @@ this.includedScopes = includedScopes;
 this.excludedScopes = excludedScopes;
 this.includeOptional = includeOptional;
 this.clashSeverity = clashSeverity;
-               this.convertToParameterString = convertToParameterString;
 
-     function convertToParameterString(includeClashSeverity)
+ this.convertToParameterString = convertToParameterString;
+ this.applyValuesToView = applyValuesToView;
+
+   this.applyViewValues = function()
+    {
+    this.includedScopes = [];
+    this.excludedScopes = [];
+            var that = this;
+
+
+           $("#includedScopeList").find(".selected").each(function() {
+
+
+                                                                        that.includedScopes.push($(this).text());
+                                                                      }  );
+
+
+               $("#excludedScopeList").find(".selected").each(function() {
+
+
+                                                                        that.excludedScopes.push($(this).text());
+                                                                      }  );
+
+             if($("#includeOptional").hasClass("selected"))
+             {
+                that.includeOptional = true;
+             }
+             else
+             {
+                   that.includeOptional = false;
+             }
+
+              this.clashSeverity = $("#clashSeverity .selected").text();
+
+
+    }
+
+
+  function applyValuesToView()
+ {
+            //Delete old selections in view
+            $(".settingsContainer").find(".selected").removeClass("selected");
+
+            for(var i=0;i<this.includedScopes.length;i++){
+
+             $("#includedScopeList li:contains('"+this.includedScopes[i]+"')").addClass("selected");
+
+       }
+            for(var i=0;i<this.excludedScopes.length;i++){
+
+             $("#excludedScopeList li:contains('"+this.excludedScopes[i]+"')").addClass("selected");
+
+       }
+                      alert("clashSeverity: " + this.clashSeverity)  ;
+            $("#clashSeverity li:contains('"+this.clashSeverity+"')").addClass("selected");
+
+            if(this.includeOptional==true)
+            {
+                $("#includeOptional").addClass("selected");
+            }
+
+
+ }
+
+     function convertToParameterString()
       {
 
 
@@ -68,10 +131,9 @@ this.clashSeverity = clashSeverity;
 
                  if(this.clashSeverity!=undefined)
                                   {
-                                        if(includeClashSeverity==true)
-                                                                  {
+
                                                                       parameterString = parameterString +"&clashSeverity="+this.clashSeverity;
-                                                                  }
+
                                   }
 
                                    if(this.includedScopes!=undefined)
@@ -108,12 +170,18 @@ this.clashSeverity = clashSeverity;
 
 
        var dependencyNodeObjectList = new Array();
+       var searchResult = new Array();
+       var activeSearchDependencyId;
        var outerVersionClashList= new Array();
         var userSettingsWrapper = new UserSettingsWrapper();
 
 
 
+  function emptyAllInputs()
+  {
+  $("input").val("");
 
+  }
 
 
 $( document ).ready(function() {
@@ -123,12 +191,18 @@ $( document ).ready(function() {
 
 
 $(".javascriptWarning").hide();
+ emptyAllInputs();
 
-$("#main").addClass("loading");
 
+<<<<<<< HEAD
  getTree();
  setOnTopIfScrolled("topBar");
+=======
+          initializeOnTopIfScrolled();
+         addMainPaddingToContentContainer();
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
+ getTree();
 
 
 });
@@ -136,6 +210,9 @@ $("#main").addClass("loading");
 
 function getTree()
 {
+$("#treeContainer").html("");
+$("#clashListContainer").html("");
+$("#contentContainer").addClass("loading");
 console.log('[' + new Date().toUTCString() + '] ' +"getTree started");
      doGet("http://localhost:8090/dependencies",drawTree,"",getList);
      console.log('[' + new Date().toUTCString() + '] ' +"getTree finished");
@@ -164,7 +241,7 @@ console.log('[' + new Date().toUTCString() + '] ' +"getList started");
                             listHtml = listHtml + buildClashListEntry(outerVersionClashList[id]);
                             }
 
-                            $(".clashListContainer").html(listHtml+"</ul>") ;
+                            $("#clashListContainer").html(listHtml+"</ul>") ;
 
 
 
@@ -249,10 +326,10 @@ console.log('[' + new Date().toUTCString() + '] ' +"getList started");
 
 
 
- $("#leftMain").html( html);
+ $("#treeContainer").html( html);
         console.log('[' + new Date().toUTCString() + '] ' +"drawTree finished");
 
-        $("#main").removeClass("loading");
+        $("#contentContainer").removeClass("loading");
  }
 
 function buildTree(data)
@@ -261,6 +338,7 @@ function buildTree(data)
 
              var dep = new DependencyNodeObject(data);
                       dependencyNodeObjectList[dep.dependencyNodeWrapper.id] = dep;
+
 
 
                        var html=buildGuiDependency(dep);
@@ -312,7 +390,16 @@ function buildGuiDependency(dependencyNodeObject)
                                   var highestVersionLink = '<span class="highestVersionLink" onclick="searchAndHighlightDependencyByCoordinates(&quot;'+dependencyNodeObject.dependencyNodeWrapper.groupId+'&quot;,&quot;'+dependencyNodeObject.dependencyNodeWrapper.artifactId+'&quot;,&quot;'+dependencyNodeObject.dependencyNodeWrapper.project.highestVersion+'&quot;,&quot;highlightSearch&quot;,&quot;highlightSearch&quot;,true);">'+dependencyNodeObject.dependencyNodeWrapper.project.highestVersion+'</span>';
                                   var lowestVersionLink = '<span class="lowestVersionLink" onclick="searchAndHighlightDependencyByCoordinates(&quot;'+dependencyNodeObject.dependencyNodeWrapper.groupId+'&quot;,&quot;'+dependencyNodeObject.dependencyNodeWrapper.artifactId+'&quot;,&quot;'+dependencyNodeObject.dependencyNodeWrapper.project.lowestVersion+'&quot;,&quot;highlightSearch&quot;,&quot;highlightSearch&quot;,true);">'+dependencyNodeObject.dependencyNodeWrapper.project.lowestVersion+'</span>';
 
+var optionalHtml="";
 
+               if(dependencyNodeObject.dependencyNodeWrapper.optional==true)
+               {
+                  optionalHtml = " <span class='optional' title='This dependency is optional'>(o)</span>";
+               }
+
+
+
+var scopeHtml= " <span class='scope' title='The scope of this dependency is "+dependencyNodeObject.dependencyNodeWrapper.scope+".'>("+dependencyNodeObject.dependencyNodeWrapper.scope.charAt(0)+")</span>";
 
 
                                //searchviaID   var usedVersionLink = '<span class="usedVersionLink" onclick="searchAndHighlightDependency(&quot;'+dependencyNodeObject.dependencyNodeWrapper.groupId+'&quot;,&quot;'+dependencyNodeObject.dependencyNodeWrapper.artifactId+'&quot;,&quot;'+dependencyNodeObject.dependencyNodeWrapper.project.usedVersion+'&quot;,&quot;highlightSearch&quot;,&quot;true&quot;);">'+dependencyNodeObject.dependencyNodeWrapper.project.usedVersion+'</span>';
@@ -322,18 +409,24 @@ function buildGuiDependency(dependencyNodeObject)
              arrowClass="clashSeveritySafe";
          }
 
+                var idHtml="";
 
 
-    return '<li class="depNodeLi"  ><div class="depNodeWrapper '+arrowClass+'" id="dNW'+dependencyNodeObject.dependencyNodeWrapper.id+'"><div id="'+dependencyNodeObject.dependencyNodeWrapper.id+'" class="depNode">\
+
+
+
+                  idHtml= idHtml + dependencyNodeObject.dependencyNodeWrapper.id;
+
+    return '<li class="depNodeLi"  ><div class="depNodeWrapper '+arrowClass+'" id="dNW'+idHtml+'"><div id="'+idHtml+'" class="depNode">\
                                              <span class="groupId" title="groupId">'+dependencyNodeObject.dependencyNodeWrapper.groupId+'</span>     \
                                              <hr>                                         \
                                              <span class="artifactId" title="artifactId">'+dependencyNodeObject.dependencyNodeWrapper.artifactId+'</span>   \
                                              <hr>                                      \
-                                             <span class="version" title="version">'+dependencyNodeObject.dependencyNodeWrapper.version+'</span> \
-                                              <div class="details"><div title="from maven used version of this project"><span >used version:  </span>'+usedVersionLink+'</div> <hr><div title="highest version of this project included in the analyzed dependency"><span >highest version:  </span>'+highestVersionLink+'</div><hr><div title="lowest version of this project included in the analyzed dependency"><span >lowest version: </span>'+lowestVersionLink+'</div><hr><div title="number of direct dependencies"><span >number of dep: '+dependencyNodeObject.dependencyNodeWrapper.children.length+'</span></div></div> <div class="depMenu"><a class="detailsButton">details</a> | '+mavenCentralLink+' </div> </div>   </div>   ' ;
+                                             <span class="version" title="version">'+dependencyNodeObject.dependencyNodeWrapper.version+'</span>'+scopeHtml+' '+optionalHtml+'  \
+                                              <div class="details"><div title="from maven used version of this project"><span >used version:  </span>'+usedVersionLink+'</div> <hr><div title="highest version of this project included in the analyzed dependency"><span >highest version:  </span>'+highestVersionLink+'</div><hr><div title="lowest version of this project included in the analyzed dependency"><span >lowest version: </span>'+lowestVersionLink+'</div></div> <div class="depMenu"><a class="detailsButton">details</a> | '+mavenCentralLink+' </div> </div>  <span>'+dependencyNodeObject.dependencyNodeWrapper.hasConcurrentDependencyWinner+'</span> </div>   ' ;
     }
 
-
+                                            //TODO add count of the same dependencies <hr><div title="number of direct dependencies"><span >number of dep: '+dependencyNodeObject.dependencyNodeWrapper.children.length+'</span></div>
 
 
         var delayTime = 200, clickNumber = 0, timer = null;
@@ -368,6 +461,90 @@ function buildGuiDependency(dependencyNodeObject)
 
 
 
+
+
+ $(document).on('click', '#searchJumpBack', function(){
+
+                                var idBefore;
+                                 var jumpToLast = false;
+                                for(var index in searchResult) {
+
+                                                if(activeSearchDependencyId==undefined)
+                                                {
+                                                      activeSearchDependencyId = searchResult[index].dependencyNodeWrapper.id;
+                                                      break;
+                                                }
+
+                                                var idNow=  searchResult[index].dependencyNodeWrapper.id ;
+                                                if(idNow==activeSearchDependencyId)
+                                                {
+                                                  if(idBefore!=undefined)
+                                                  {
+                                                    jumpToLocation(idBefore);
+                                                        activeSearchDependencyId = idBefore;
+                                                    break;
+                                                  }
+                                                  else
+                                                  {
+                                                      jumpToLast = true;
+                                                  }
+
+                                                }
+                                             idBefore =  idNow;
+                                   }
+
+                                  if(jumpToLast==true)
+                                  {
+                                    jumpToLocation(idBefore);
+                                     activeSearchDependencyId = idBefore;
+                                  }
+
+
+                 });
+
+$(document).on('click', '#searchJumpNext', function(){
+
+                          var jumpToNext = false;
+
+                                                         for(var index in searchResult) {
+
+                                                                         if(activeSearchDependencyId==undefined)
+                                                                         {
+                                                                               activeSearchDependencyId = searchResult[index].dependencyNodeWrapper.id;
+                                                                              jumpToNext=true;
+                                                                               break;
+                                                                         }
+                                                                            var idNow=  searchResult[index].dependencyNodeWrapper.id ;
+                                                                          if(jumpToNext==true)
+                                                                          {
+                                                                                  jumpToLocation(idNow);
+                                                                                activeSearchDependencyId = idNow;
+                                                                                  jumpToNext = false;
+                                                                                 break;
+                                                                          }
+
+
+                                                                         if(idNow==activeSearchDependencyId)
+                                                                         {
+                                                                             jumpToNext = true;
+
+                                                                         }
+
+                                                            }
+
+
+                                                               if(jumpToNext==true)
+                                                               {
+                                                               for(var index in searchResult) {
+                                                                    var idNow=  searchResult[index].dependencyNodeWrapper.id ;
+                                                                     jumpToLocation(idNow);
+                                                                    activeSearchDependencyId = idNow;
+                                                                    break;
+                                                               }
+                                                               }
+
+                });
+          /*
 $(document).on('click', '#searchButton', function(){
 
                           var result =  searchAndHighlightDependencyByCoordinates($('#groupIdInput').val(),$('#artifactIdInput').val(),$('#versionInput').val(),'highlightSearch','highlightSearch',true);
@@ -381,7 +558,7 @@ $(document).on('click', '#searchButton', function(){
 
                                                                                                                                                     }
 
-                });
+                }); */
 
 
 
@@ -391,18 +568,53 @@ $(document).on('input', '.searchInput', function(){
 
                                                            if(Object.keys(result).length>0 )
                                                            {
-                                                               $("#searchButton").html("results <span>("+Object.keys(result).length+")</span>");
+                                                               $("#searchResultOutput").html("results <span>("+Object.keys(result).length+")</span>");
                                                            }
                                                            else
                                                            {
-                                                               $("#searchButton").html("no results");
+                                                               $("#searchResultOutput").html("no results");
 
                                                            }
 
 
                 });
 
+$(document).on('click', '#applyResolutionSettings', function(){
+
+
+                            userSettingsWrapper.applyViewValues();
+                            getTree();
+
+                });
+
+$(document).on('click', '#clearSearchButton', function(){
+                            clearSearchResults();
+
+                });
+             //TODO clearen der searhc result sobald an einen ort gesprungen wird
+
+      function calculateMainPadding()
+      {
+          var result =0;
+
+          if($("#headerContainer").css("top")!=0)
+          {
+          result = result + $("#logoContainer").outerHeight(true) ;
+          }
+
+        result = result + $("#headerContainer").outerHeight(true);
+
+
+          return result;
+      }
+
+      function addMainPaddingToContentContainer()
+      {
+          document.getElementById( "contentContainer" ).style.paddingTop =  calculateMainPadding() +"px";
+      }
+
  $(document).on('click', '.openSearchButton', function(){
+<<<<<<< HEAD
  var mainHeight = parseInt(document.getElementById("main").style.paddingTop);
                             $("#searchContainer").toggle();
                             if(isopenSearchButton){
@@ -417,10 +629,21 @@ $(document).on('input', '.searchInput', function(){
                                isopenSearchButton=true;
                               }
                                document.getElementById( "main" ).style.paddingTop = mainHeight+"px";
+=======
+
+                             $("#searchContainer").toggle();
+                                       $(this).children("span").toggleClass("triangleDown");
+                                                                                          $(this).children("span").toggleClass("triangleUp");
+
+                                 addMainPaddingToContentContainer();
+
+
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
                 });
 
  $(document).on('click', '.openSettingsButton', function(){
+<<<<<<< HEAD
  var mainHeight = parseInt(document.getElementById("main").style.paddingTop);
 
                             $("#settingsFilterContainer").toggle();
@@ -436,12 +659,20 @@ $(document).on('input', '.searchInput', function(){
                                                           }
                                  document.getElementById( "main" ).style.paddingTop = mainHeight+"px";
 
+=======
+                            userSettingsWrapper.applyValuesToView();
+>>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
+                                                        $("#settingsFilterContainer").toggle();
+                                                             $(this).children("span").toggleClass("triangleDown");
+                                                                                                                $(this).children("span").toggleClass("triangleUp");
+                                                        addMainPaddingToContentContainer();
                 });
 
                  $(document).on('click', '.openClashListButton', function(){
-                                            $(".clashListContainer").toggle();
-
+                                            $("#clashListContainer").toggle();
+                                                     $(this).children("span").toggleClass("triangleDown");
+                                                       $(this).children("span").toggleClass("triangleUp");
                                 });
 
 
@@ -455,8 +686,34 @@ $(document).on('input', '.searchInput', function(){
 
                 });
 
+$(document).on('click', '#treeViewMode li', function(){
+
+                               var selectedValue = $(this).text();
+                               alert(selectedValue) ;
+
+                                 $("#dependencyTree").removeClass("viewModeShortened viewModeFull");
+
+                              if(selectedValue=="Shortened")
+                              {
+                                $("#dependencyTree").addClass("viewModeShortened");
+                              }
+                              else if(selectedValue=="Full")
+                              {
+                                   $("#dependencyTree").addClass("viewModeFull");
+                              }
+
+
+                });
+
          $(document).on('mouseenter', '.depNode', function(){
 
+
+                              if($("#dependencyTree").hasClass("viewModeShortened"))
+                              {
+                                  $(this).children("hr").addClass("showBlock");
+                                   $(this).children(".version").addClass("showBlock");
+                                   $(this).children(".groupId").addClass("showBlock");
+                              }
 
                                $(this).children(".depMenu").show();
 
@@ -464,7 +721,12 @@ $(document).on('input', '.searchInput', function(){
                 });
 
                   $(document).on('mouseleave', '.depNode', function(){
-
+                                                  if($("#dependencyTree").hasClass("viewModeShortened"))
+                                                                               {
+                                                                                   $(this).children("hr").removeClass("showBlock");
+                                                                                    $(this).children(".version").removeClass("showBlock");
+                                                                                    $(this).children(".groupId").removeClass("showBlock");
+                                                                               }
                                           $(this).children(".depMenu").hide();
 
 
@@ -473,8 +735,16 @@ $(document).on('input', '.searchInput', function(){
 
 
 
-                                 $(document).on('click', '.easySelectBox li', function(){
+                                 $(document).on('click', '.easySelectBox.selectModeMultiple li', function(){
 
+                                                                        $(this).toggleClass("selected");
+
+
+                                                              });
+
+ $(document).on('click', '.easySelectBox.selectModeSingle li', function(){
+                                                                            alert("selectModeSingle");
+                                                                         $(this).parent().children().removeClass("selected");
                                                                         $(this).toggleClass("selected");
 
 
@@ -550,8 +820,8 @@ $(document).on('input', '.searchInput', function(){
                                                              userSettingsWrapper.clashSeverity = responseObject.userParameterWrapper.clashSeverity;
 
 
-
-                                                           console.log("userSettingsWrapper " + userSettingsWrapper.includedScopes);
+                                                                   userSettingsWrapper.applyValuesToView();
+                                                           console.log("userSettingsWrapper clashSeverity " + userSettingsWrapper.clashSeverity);
 
                                                         callbackFunction.call( this, responseObject.result );
 
@@ -567,7 +837,15 @@ $(document).on('input', '.searchInput', function(){
 
 
 
+                                function clearSearchResults()
+                                {
+                                       searchResult = new Array();
+                                       activeSearchDependencyId=undefined;
+                                        $(".highlightSearch").removeClass("highlightSearch");
+                                        $("#searchResultOutput").html("no results");
+                                        $(".searchInput").val("");
 
+                                }
 
                                function searchForDependencyById(id)
                                                                        {
@@ -579,32 +857,33 @@ $(document).on('input', '.searchInput', function(){
                                function searchForDependenciesByCoordinates(groupId,artifactId,version)
                                         {
                                                           //  alert("dependencyNodeObjectList length: " + Object.keys(dependencyNodeObjectList).length)
-                                                          var result =  jQuery.extend({}, dependencyNodeObjectList);
+                                                          searchResult =  jQuery.extend({}, dependencyNodeObjectList);
+                                                           activeSearchDependencyId=undefined;
 
                                             if(groupId != undefined && groupId!="" )
                                             {
 
 
-                                                            for(var index in result) {
+                                                            for(var index in searchResult) {
 
                                                                     var compValue1;
                                                                      var compValue2 = groupId;
                                                                  if(groupId.slice(-1)=="*")
                                                                  {
                                                                       compValue2 = groupId.substring(0,groupId.length-1);
-                                                                      compValue1 =result[index].dependencyNodeWrapper.groupId.substring(0,compValue2.length);
+                                                                      compValue1 =searchResult[index].dependencyNodeWrapper.groupId.substring(0,compValue2.length);
 
                                                                  }
                                                                  else
                                                                  {
-                                                                    compValue1 =result[index].dependencyNodeWrapper.groupId;
+                                                                    compValue1 =searchResult[index].dependencyNodeWrapper.groupId;
                                                                  }
 
 
                                                               if(compValue1!=compValue2)
                                                                {
 
-                                                                  delete result[index];
+                                                                  delete searchResult[index];
                                                                }
 
 
@@ -619,7 +898,7 @@ $(document).on('input', '.searchInput', function(){
                                             if(artifactId != undefined  && artifactId!="")
                                             {
 
-                                                   for(var index in result) {
+                                                   for(var index in searchResult) {
 
 
 
@@ -628,19 +907,19 @@ $(document).on('input', '.searchInput', function(){
                                                                                                                     if(artifactId.slice(-1)=="*")
                                                                                                                     {
                                                                                                                          compValue2 = artifactId.substring(0,artifactId.length-1);
-                                                                                                                         compValue1 =result[index].dependencyNodeWrapper.artifactId.substring(0,compValue2.length);
+                                                                                                                         compValue1 =searchResult[index].dependencyNodeWrapper.artifactId.substring(0,compValue2.length);
 
                                                                                                                     }
                                                                                                                     else
                                                                                                                     {
-                                                                                                                       compValue1 =result[index].dependencyNodeWrapper.artifactId;
+                                                                                                                       compValue1 =searchResult[index].dependencyNodeWrapper.artifactId;
                                                                                                                     }
 
 
                                            if(compValue1!=compValue2)
                                                                                                         {
 
-                                                                                                           delete result[index];
+                                                                                                           delete searchResult[index];
                                                                                                         }
 
                                                                                                                                                                                       }
@@ -650,25 +929,25 @@ $(document).on('input', '.searchInput', function(){
                                              if(version != undefined && version!="")
                                             {
 
-                                                 for(var index in result) {
+                                                 for(var index in searchResult) {
 
      var compValue1;
                                                                      var compValue2 = version;
                                                                  if(version.slice(-1)=="*")
                                                                  {
                                                                       compValue2 = version.substring(0,version.length-1);
-                                                                      compValue1 =result[index].dependencyNodeWrapper.version.substring(0,compValue2.length);
+                                                                      compValue1 =searchResult[index].dependencyNodeWrapper.version.substring(0,compValue2.length);
 
                                                                  }
                                                                  else
                                                                  {
-                                                                    compValue1 =result[index].dependencyNodeWrapper.version;
+                                                                    compValue1 =searchResult[index].dependencyNodeWrapper.version;
                                                                  }
 
                                                           if(compValue1!=compValue2)
                                                                                                                        {
 
-                                                                                                                          delete result[index];
+                                                                                                                          delete searchResult[index];
                                                                                                                        }
                                                                                                                                                                                     }
 
@@ -676,19 +955,29 @@ $(document).on('input', '.searchInput', function(){
                                                 if((groupId == undefined || groupId=="") && (artifactId == undefined || artifactId=="") && (version == undefined || version==""))
                                                 {
 
-                                                      result = new Array();
+                                                      searchResult = new Array();
                                                 }
 
+                                        //Check if search result includes the active dependency d0r0a0
+
+                                                     delete searchResult["d0r0a0"];
 
 
-
-                                          return result;
+                                          return searchResult;
 
 
                                         }
 
 
+     function jumpToLocation(locationId)
+     {
+         location.href = "#"+locationId;
 
+       $('html, body').animate({
+              scrollTop: $("#"+locationId).offset().top - calculateMainPadding()
+          },
+           0);
+     }
 
  function highlightDependency(dependencyNodeWrapper,highlightClazz,openPath,jumpTo)
                                         {
@@ -707,7 +996,7 @@ $(document).on('input', '.searchInput', function(){
 
                                                                                          if(jumpTo == true)
                                                                                                                                   {
-                                                                                                                                                  location.href = "#"+dependencyNodeWrapper.id;
+                                                                                                                                                  jumpToLocation(dependencyNodeWrapper.id);
 
                                                                                                                                   }
 
@@ -716,7 +1005,7 @@ $(document).on('input', '.searchInput', function(){
 
 function highlightDependencyById(id,highlightClazz,highlightClazzToDelete,openPath,jumpTo)
                                         {
-
+                                             clearSearchResults();
                                             $("."+highlightClazzToDelete).removeClass(highlightClazzToDelete);
 
                                             highlightDependency(dependencyNodeObjectList[id].dependencyNodeWrapper,highlightClazz,openPath,jumpTo);
@@ -724,7 +1013,7 @@ function highlightDependencyById(id,highlightClazz,highlightClazzToDelete,openPa
                                         }
                                         function highlightDependencyByIds(ids,highlightClazz,highlightClazzToDelete,openPath)
                                         {
-
+                                              clearSearchResults();
                                             $("."+highlightClazzToDelete).removeClass(highlightClazzToDelete);
 
 
@@ -778,3 +1067,78 @@ function highlightDependencyById(id,highlightClazz,highlightClazzToDelete,openPa
 
                                                                                      return result;
                                                                                 }
+
+
+
+
+                                                                                function initializeOnTopIfScrolled(){
+
+                                                                                      var headerContainer = $("#headerContainer");
+
+                                                                                    var _defautlTop = headerContainer.offset().top - $(document).scrollTop();
+
+                                                                                    var _defautlLeft = headerContainer.offset().left - $(document).scrollLeft();
+
+
+
+                                                                                    var originalHeaderContainerPosition = headerContainer.css('position');
+                                                                                    var originalHeaderContainerTop = headerContainer.css('top');
+                                                                                    var originalHeaderContainerLeft = headerContainer.css('left');
+                                                                                    var originalHeaderContainerZIndex = headerContainer.css('z-index');
+                                                                                    var originalHeaderContainerWidth = headerContainer.css('width');
+
+
+                                                                                    var originalLogoContainerPosition = $("#logoContainer").css("position");
+                                                                                     var   originalLogoContainerWidth =  $("#logoContainer").css("width");
+
+                                                                                    $(window).scroll(function(){
+
+
+                                                                                 if($(this).scrollTop() > _defautlTop && $(this).scrollLeft() > _defautlLeft)
+                                                                                 {
+                                                                                      $("#headerContainer").css({'position':'fixed','top':0+'px',
+                                                                                         'z-index':99999});
+                                                                                         $("#logoContainer").css({
+                                                                                        position: originalLogoContainerPosition
+
+                                                                                      });
+
+
+                                                                                 }
+                                                                                 else if($(this).scrollTop() > _defautlTop)
+                                                                                 {
+                                                                                       $("#headerContainer").css({'position':'fixed','top':0+'px','z-index':99999});
+                                                                                       $("#logoContainer").css({position: originalLogoContainerPosition });
+
+                                                                                 }
+                                                                                 else if($(this).scrollLeft() > _defautlLeft)
+                                                                                 {
+                                                                                          if( $("#headerContainer").css("top").replace("px","")=="0")
+                                                                                          {
+                                                                                          $("#headerContainer").css({'position':'fixed','top':'70px'});
+                                                                                            $("#logoContainer").css({position: "fixed"});
+
+                                                                                          }
+                                                                                          else
+                                                                                          {
+                                                                                            $("#headerContainer").css({'position':'fixed'});
+                                                                                           $("#logoContainer").css({position: "fixed"});
+
+                                                                                          }
+
+
+                                                                                 }
+                                                                                 else
+                                                                                 {
+                                                                                      $("#headerContainer").css({'position':originalHeaderContainerPosition,'top':originalHeaderContainerTop,
+                                                                                             'z-index':originalHeaderContainerZIndex});
+
+                                                                                            $("#logoContainer").css({'position':originalLogoContainerPosition});
+                                                                                 }
+
+                                                                                    });
+                                                                                }
+
+                                                                                window.onresize = function(event) {
+                                                                                        addMainPaddingToContentContainer();
+                                                                                };

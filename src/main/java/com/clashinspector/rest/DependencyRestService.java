@@ -43,13 +43,22 @@ public class DependencyRestService {
   private static RepositorySystemSession repositorySystemSession;
   private static UserParameterWrapper startParameter;
 
+  public static void init(Artifact artifact, RepositorySystem repositorySystem1,RepositorySystemSession repositorySystemSession1, UserParameterWrapper userParameterWrapper)
+  {
+    startParameter = userParameterWrapper;
+    mainArtifact = artifact;
+    repositorySystem = repositorySystem1;
+    repositorySystemSession = repositorySystemSession1;
+  }
+
+
   @GET
   @JSONP(queryParam="callback")
   @Produces("application/x-javascript")
-  public String getAllDependenciesWithClashes(@QueryParam("callback") String callback,@QueryParam( "includedScope" ) List<String> includedScopes,@QueryParam( "excludedScope" ) List<String> excludedScopes,@QueryParam( "includeOptional" ) boolean includeOptional)
+  public String getAllDependenciesWithClashes(@QueryParam("callback") String callback,@QueryParam( "includedScope" ) List<String> includedScopes,@QueryParam( "excludedScope" ) List<String> excludedScopes,@QueryParam( "includeOptional" ) boolean includeOptional,@QueryParam( "clashSeverity" )ClashSeverity clashSeverity)
   {
-    //TODO Problem lösen, dass javascriopt speichert nur pro aufruf, also view ID jedesmal wieder verloren bei reload
-    System.out.println("joo2");
+
+
 
     UserParameterWrapper userParameterWrapper;
 
@@ -60,7 +69,7 @@ public class DependencyRestService {
     }
     else
     {
-      userParameterWrapper = new UserParameterWrapper(includedScopes,excludedScopes,includeOptional);
+      userParameterWrapper = new UserParameterWrapper(includedScopes,excludedScopes,includeOptional,clashSeverity);
       System.out.println("UserParameter aus url hergestellt: " + includedScopes.toString() + " " +  excludedScopes.toString() + " " + includeOptional)    ;
     }
 
@@ -108,8 +117,7 @@ public class DependencyRestService {
   @Produces("application/x-javascript")
   public String getClashList(@QueryParam("callback") String callback,@QueryParam( "includedScope" ) List<String> includedScopes,@QueryParam( "excludedScope" ) List<String> excludedScopes,@QueryParam( "includeOptional" ) boolean includeOptional,@QueryParam( "clashSeverity" )ClashSeverity clashSeverity)
   {
-    //TODO Problem lösen, dass javascriopt speichert nur pro aufruf, also view ID jedesmal wieder verloren bei reload
-        clashSeverity = ClashSeverity.UNSAFE;
+
 
     UserParameterWrapper userParameterWrapper;
 
@@ -122,8 +130,8 @@ public class DependencyRestService {
     }
     else
     {
-      userParameterWrapper = new UserParameterWrapper(includedScopes,excludedScopes,includeOptional);
-      System.out.println("UserParameter aus url hergestellt: " + includedScopes.toString() + " " +  excludedScopes.toString() + " " + includeOptional)    ;
+      userParameterWrapper = new UserParameterWrapper(includedScopes,excludedScopes,includeOptional,clashSeverity);
+      System.out.println("UserParameter aus url hergestellt: " + includedScopes.toString() + " " +  excludedScopes.toString() + " " + includeOptional + " " + clashSeverity)    ;
     }
 
     System.out.println("joo6");
@@ -202,13 +210,7 @@ public class DependencyRestService {
 
 
 
-  public static void init(Artifact artifact, RepositorySystem repositorySystem1,RepositorySystemSession repositorySystemSession1, UserParameterWrapper userParameterWrapper)
-  {
-    startParameter = userParameterWrapper;
-    mainArtifact = artifact;
-    repositorySystem = repositorySystem1;
-    repositorySystemSession = repositorySystemSession1;
-  }
+
 
 
 }
