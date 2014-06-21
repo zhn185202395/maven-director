@@ -215,58 +215,6 @@
       </requirements>
     </mojo>
     <mojo>
-      <goal>help</goal>
-      <description>Display help information on clashinspector-maven-plugin.&lt;br/&gt;
-Call &lt;code&gt;mvn clashinspector:help -Ddetail=true -Dgoal=&amp;lt;goal-name&amp;gt;&lt;/code&gt; to display parameter details.</description>
-      <requiresDirectInvocation>false</requiresDirectInvocation>
-      <requiresProject>false</requiresProject>
-      <requiresReports>false</requiresReports>
-      <aggregator>false</aggregator>
-      <requiresOnline>false</requiresOnline>
-      <inheritedByDefault>true</inheritedByDefault>
-      <implementation>com.clashinspector.mojos.HelpMojo</implementation>
-      <language>java</language>
-      <instantiationStrategy>per-lookup</instantiationStrategy>
-      <executionStrategy>once-per-session</executionStrategy>
-      <threadSafe>true</threadSafe>
-      <parameters>
-        <parameter>
-          <name>detail</name>
-          <type>boolean</type>
-          <required>false</required>
-          <editable>true</editable>
-          <description>If &lt;code&gt;true&lt;/code&gt;, display all settable properties for each goal.</description>
-        </parameter>
-        <parameter>
-          <name>goal</name>
-          <type>java.lang.String</type>
-          <required>false</required>
-          <editable>true</editable>
-          <description>The name of the goal for which to show help. If unspecified, all goals will be displayed.</description>
-        </parameter>
-        <parameter>
-          <name>indentSize</name>
-          <type>int</type>
-          <required>false</required>
-          <editable>true</editable>
-          <description>The number of spaces per indentation level, should be positive.</description>
-        </parameter>
-        <parameter>
-          <name>lineLength</name>
-          <type>int</type>
-          <required>false</required>
-          <editable>true</editable>
-          <description>The maximum length of a display line, should be positive.</description>
-        </parameter>
-      </parameters>
-      <configuration>
-        <detail implementation="boolean" default-value="false">${detail}</detail>
-        <goal implementation="java.lang.String">${goal}</goal>
-        <indentSize implementation="int" default-value="2">${indentSize}</indentSize>
-        <lineLength implementation="int" default-value="80">${lineLength}</lineLength>
-      </configuration>
-    </mojo>
-    <mojo>
       <goal>tree</goal>
       <description>Displays the dependency tree for this project. The tree also shows version clashes.</description>
       <requiresDirectInvocation>false</requiresDirectInvocation>
@@ -450,6 +398,58 @@ Call &lt;code&gt;mvn clashinspector:help -Ddetail=true -Dgoal=&amp;lt;goal-name&
         </requirement>
       </requirements>
     </mojo>
+    <mojo>
+      <goal>help</goal>
+      <description>Display help information on clashinspector-maven-plugin.&lt;br/&gt;
+Call &lt;code&gt;mvn clashinspector:help -Ddetail=true -Dgoal=&amp;lt;goal-name&amp;gt;&lt;/code&gt; to display parameter details.</description>
+      <requiresDirectInvocation>false</requiresDirectInvocation>
+      <requiresProject>false</requiresProject>
+      <requiresReports>false</requiresReports>
+      <aggregator>false</aggregator>
+      <requiresOnline>false</requiresOnline>
+      <inheritedByDefault>true</inheritedByDefault>
+      <implementation>com.clashinspector.mojos.HelpMojo</implementation>
+      <language>java</language>
+      <instantiationStrategy>per-lookup</instantiationStrategy>
+      <executionStrategy>once-per-session</executionStrategy>
+      <threadSafe>true</threadSafe>
+      <parameters>
+        <parameter>
+          <name>detail</name>
+          <type>boolean</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>If &lt;code&gt;true&lt;/code&gt;, display all settable properties for each goal.</description>
+        </parameter>
+        <parameter>
+          <name>goal</name>
+          <type>java.lang.String</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The name of the goal for which to show help. If unspecified, all goals will be displayed.</description>
+        </parameter>
+        <parameter>
+          <name>indentSize</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The number of spaces per indentation level, should be positive.</description>
+        </parameter>
+        <parameter>
+          <name>lineLength</name>
+          <type>int</type>
+          <required>false</required>
+          <editable>true</editable>
+          <description>The maximum length of a display line, should be positive.</description>
+        </parameter>
+      </parameters>
+      <configuration>
+        <detail implementation="boolean" default-value="false">${detail}</detail>
+        <goal implementation="java.lang.String">${goal}</goal>
+        <indentSize implementation="int" default-value="2">${indentSize}</indentSize>
+        <lineLength implementation="int" default-value="80">${lineLength}</lineLength>
+      </configuration>
+    </mojo>
   </mojos>
   <dependencies>
     <dependency>
@@ -631,6 +631,18 @@ Call &lt;code&gt;mvn clashinspector:help -Ddetail=true -Dgoal=&amp;lt;goal-name&
       <artifactId>jackson-core-asl</artifactId>
       <type>jar</type>
       <version>1.9.13</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <type>jar</type>
+      <version>1.7.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <type>jar</type>
+      <version>1.7.7</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>

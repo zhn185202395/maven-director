@@ -16,6 +16,11 @@ public class WhiteListDependency {
   private String version;
   private String artifactId;
 
+  public WhiteListDependency(String groupId,String artifactId, String version){
+    this.groupId = groupId;
+    this.version = version;
+    this.artifactId = artifactId;
+  }
   public String getGroupId() {
     return groupId;
   }

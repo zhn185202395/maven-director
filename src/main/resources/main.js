@@ -240,8 +240,9 @@ console.log('[' + new Date().toUTCString() + '] ' +"getList started");
 
 
  $("#analyzedDep").html("<h2>"+ result.groupId+":"+result.artifactId+":"+result.version + "</h2>");
-
+ var mainWidth=1;
  var html = "<ul id='dependencyTree'>" +   buildTree(result);
+  document.getElementById( "main" ).style.width = mainWidth+"px";
 
  html = html + "</ul>";
 
@@ -442,6 +443,10 @@ $(document).on('input', '.searchInput', function(){
                                             $(".clashListContainer").toggle();
 
                                 });
+
+
+
+
 
         $(document).on('dbclick', '.depNode', function(){
 
