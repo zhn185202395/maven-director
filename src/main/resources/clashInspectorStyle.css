@@ -6,12 +6,6 @@
     list-style: none;
 }
 
-<<<<<<< HEAD
-body.topBarDisabled {
-   /* padding-top: 20px;*/
-}
-=======
->>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
 body {
     background-color: #FFFFFF;
@@ -201,11 +195,7 @@ hr {
 #contentContainer {
     position: relative;
     min-height: 200px;
-<<<<<<< HEAD
-    padding-top: 130px;
-=======
     padding-top: 130px;    /*hz */
->>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 }
 
 .topContainer {
@@ -219,11 +209,7 @@ hr {
 
     list-style: none outside none;
     margin: 0px;
-<<<<<<< HEAD
-     z-index: 1000;
-=======
       z-index: 1000;
->>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 
 }
 
@@ -322,14 +308,9 @@ hr {
     background-color: #F5F5F5;
     padding: 8px 10px;
     border-radius: 4px;
-<<<<<<< HEAD
-    margin-top:20px;
-
-=======
     margin-top:15px;
     overflow-y: auto;
     max-height: 300px;
->>>>>>> f9b36829f5f63c0add7c62714af8dd1b2ef6b74e
 }
 
 #clashListContainer .clashSeverityUnsafe {
@@ -812,16 +793,4 @@ display:none;
         background-color: #FFFFFF
     }
 
-}
-#topBar{
-     background-color: #FFFFFF;
-       padding-bottom: 15px;
-       position: absolute;
-top:80px;
-       z-index: 1000;
-       width: 97%;
-}
-#logo{
-    padding-top:20px;
-    padding-bottom:20px;
 }

@@ -3,10 +3,7 @@ package com.clashinspector;
 
 
 import com.clashinspector.model.ClashCollectResultWrapper;
-import com.clashinspector.model.InnerVersionClash;
-import com.clashinspector.model.OuterVersionClash;
 import com.clashinspector.mojos.ClashSeverity;
-import com.clashinspector.mojos.WhiteListDependency;
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
 import org.eclipse.aether.DefaultRepositorySystemSession;
 import org.eclipse.aether.RepositorySystem;
@@ -44,13 +41,11 @@ public class DependencyServiceTest {
 
   @Before
   public void init() {
-
     this.repoSystem = ManualRepositorySystemFactory.newRepositorySystem();
 
     this.repoSession = MavenRepositorySystemUtils.newSession();
 
     File repo = findRepoLocation();
-
 
     LocalRepository localRepo = new LocalRepository( repo );
     //    LocalRepository localRepo = new LocalRepository( "src/test/repo" );
@@ -85,14 +80,12 @@ public class DependencyServiceTest {
     }
 
     @Nullable String workspace = System.getProperty( "WORKSPACE" );
-
     if ( workspace != null ) {
       return new File( workspace + "/.repository" );
     }
 
     //Fallback
     File userHome = new File( System.getProperty( "user.home" ) );
-
     return new File( userHome, ".m2/repository" );
   }
 
@@ -123,7 +116,6 @@ public class DependencyServiceTest {
     assertEquals( "Number of Clashes with Severity for Safe wrong.", 0, clashCollectResultWrapper.getNumberOfOuterClashesForSeverityLevel( ClashSeverity.SAFE ) );
     assertEquals( "Number of Clashes with Severity for Unsafe wrong.", 0, clashCollectResultWrapper.getNumberOfOuterClashesForSeverityLevel( ClashSeverity.UNSAFE ) );
     assertEquals( "Number of Clashes with Severity for Critical wrong.", 0, clashCollectResultWrapper.getNumberOfOuterClashesForSeverityLevel( ClashSeverity.CRITICAL ) );
-
 
 
 
@@ -223,23 +215,7 @@ public class DependencyServiceTest {
     assertEquals( "Number of Clashes with Severity for Unsafe wrong.", 1, clashCollectResultWrapper.getNumberOfOuterClashesForSeverityLevel( ClashSeverity.UNSAFE ) );
     assertEquals( "Number of Clashes with Severity for Critical wrong.", 1, clashCollectResultWrapper.getNumberOfOuterClashesForSeverityLevel( ClashSeverity.CRITICAL ) );
 
-    //Anzahl der WhiteList Clash
-    WhiteListDependency whiteListDependency = new WhiteListDependency("com.google.guava","guava","13.0.1");
-
-    List<WhiteListDependency> whiteList = new ArrayList<WhiteListDependency>();
-    whiteList.add( whiteListDependency );
-
-    assertEquals( "Number of White List Clashes wrong.", 3, testwhiteListClash(clashCollectResultWrapper, whiteList));
 
   }
-  public int testwhiteListClash(ClashCollectResultWrapper clashCollectResultWrapper, List<WhiteListDependency> whiteList) {
-    int whiteListClash=0;
-    for(OuterVersionClash outerVersionClash:clashCollectResultWrapper.getOuterVersionClashList())
-      for( InnerVersionClash innerVersionClash:outerVersionClash.getInnerVersionClashes())
-        if(innerVersionClash.hasDependencyInWhiteList( whiteList ))
-          whiteListClash += 1;
-    return     whiteListClash;
-  }
-
 
 }
